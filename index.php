@@ -1,13 +1,10 @@
 <?php
-
 $path = 'd';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $text = isset($_POST['text']) ? $_POST['text'] : file_get_contents("php://input");
     file_put_contents($path, $text);
     die;
 }
-
 if (isset($_GET['raw']) || strpos($_SERVER['HTTP_USER_AGENT'], 'curl') === 0 || strpos($_SERVER['HTTP_USER_AGENT'], 'Wget') === 0) {
     if (is_file($path)) {
         header('Content-type: text/plain');
@@ -47,26 +44,6 @@ body {
 }
 #printable {
     display: none;
-}
-@media (prefers-color-scheme: dark) {
-    body {
-        background: #333b4d;
-    }
-    #content {
-        background: #24262b;
-        color: #fff;
-        border-color: #495265;
-    }
-}
-@media print {
-    .container {
-        display: none;
-    }
-    #printable {
-        display: block;
-        white-space: pre-wrap;
-        word-break: break-word;
-    }
 }
 </style>
 </head>
