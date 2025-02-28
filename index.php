@@ -4,17 +4,10 @@ $path = 'd';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $text = isset($_POST['text']) ? $_POST['text'] : file_get_contents("php://input");
-    // Update file.
     file_put_contents($path, $text);
-
-    // If provided input is empty, delete file.
-    if (!strlen($text)) {
-        unlink($path);
-    }
     die;
 }
 
-// Print raw file when explicitly requested, or if the client is curl or wget.
 if (isset($_GET['raw']) || strpos($_SERVER['HTTP_USER_AGENT'], 'curl') === 0 || strpos($_SERVER['HTTP_USER_AGENT'], 'Wget') === 0) {
     if (is_file($path)) {
         header('Content-type: text/plain');
@@ -95,37 +88,25 @@ function uploadContent() {
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.onload = function() {
             if (request.readyState === 4) {
-
-                // If the request has ended, check again after 1 second.
                 content = temp;
                 setTimeout(uploadContent, 1000);
             }
         }
         request.onerror = function() {
-
-            // Try again after 1 second.
             setTimeout(uploadContent, 1000);
         }
         request.send('text=' + encodeURIComponent(temp));
-
-        // Update the printable contents.
         printable.removeChild(printable.firstChild);
         printable.appendChild(document.createTextNode(temp));
     }
     else {
-
-        // If the content has not changed, check again after 1 second.
         setTimeout(uploadContent, 1000);
     }
 }
-
 var textarea = document.getElementById('content');
 var printable = document.getElementById('printable');
 var content = textarea.value;
-
-// Initialize the printable contents with the initial value of the textarea.
 printable.appendChild(document.createTextNode(content));
-
 textarea.focus();
 uploadContent();
 </script>
