@@ -1,21 +1,6 @@
 <?php
 
-// Path to the directory to save the notes in, without trailing slash.
-// Should be outside the document root, if possible.
-$save_path = '_tmp';
-
-// Disable caching.
-header('Cache-Control: no-store');
-
-// If no note name is provided, or if the name is too long, or if it contains invalid characters.
-if (!isset($_GET['note']) || strlen($_GET['note']) > 64 || !preg_match('/^[a-zA-Z0-9_-]+$/', $_GET['note'])) {
-
-    // Generate a name with 5 random unambiguous characters. Redirect to it.
-    header("Location: " . substr(str_shuffle('234579abcdefghjkmnpqrstwxyz'), -5));
-    die;
-}
-
-$path = $save_path . '/' . $_GET['note'];
+$path = 'd';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $text = isset($_POST['text']) ? $_POST['text'] : file_get_contents("php://input");
@@ -44,9 +29,6 @@ if (isset($_GET['raw']) || strpos($_SERVER['HTTP_USER_AGENT'], 'curl') === 0 || 
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?php print $_GET['note']; ?></title>
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
 body {
     margin: 0;
